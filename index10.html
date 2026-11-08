@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise ❤️</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle, #51213d, #170b1c);
+      font-family: Georgia, serif;
+      color: white;
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      height: 100vh !important;
+      overflow: hidden;
+      font-family: Georgia, serif;
+      background: radial-gradient(circle, #48264f, #190b20);
+    }
+
+
+
+    /* Stars */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(#ffd68a 1px, transparent 1px);
+      background-size: 70px 70px, 110px 110px;
+      animation: sparkle 5s linear infinite;
+    }
+
+    @keyframes sparkle {
+      from {
+        background-position: 0 0, 0 0;
+      }
+
+      to {
+        background-position: 100px 150px, -100px 100px;
+      }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 25px 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      color: #f5cf91;
+      margin-bottom: 35px;
+      text-align: center;
+      font-size: 22px;
+    }
+
+    /* Envelope */
+    .envelope {
+      width: 280px;
+      height: 180px;
+      background: #d99529;
+      position: relative;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 10px 35px #0008;
+      transition: 0.5s;
+    }
+
+    .envelope::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-left: 140px solid transparent;
+      border-right: 140px solid transparent;
+      border-top: 110px solid #f3bd57;
+      z-index: 3;
+      transform-origin: top;
+      transition: 0.7s;
+    }
+
+    .envelope::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      border-left: 140px solid #c17a1d;
+      border-right: 140px solid #d18c28;
+      border-top: 90px solid transparent;
+      border-bottom: 90px solid #e7a43b;
+      z-index: 2;
+    }
+
+    .envelope.open::before {
+      transform: rotateX(180deg);
+    }
+
+    .envelope.open {
+      margin-top: 100px;
+    }
+
+    .envelope-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      font-size: 25px;
+    }
+
+    /* Letter */
+    .letter {
+      width: min(100%, 340px);
+      min-height: 420px;
+      background: #fff1d6;
+      color: #51321d;
+      padding: 25px 20px;
+      border-radius: 7px;
+      position: relative;
+      margin-top: 20px;
+      display: none;
+      box-shadow: 0 10px 35px #0007;
+      background-image: repeating-linear-gradient(transparent,
+          transparent 29px,
+          #e9d8b8 30px);
+      animation: appear 1s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .letter h3 {
+      color: #8d5528;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      font-size: 15px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+      min-height: 280px;
+    }
+
+    .signature {
+      text-align: right;
+      color: #bd8135;
+      font-style: italic;
+      margin-top: 15px;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: #ffb94f;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .next-btn {
+      display: none;
+      margin-top: 25px;
+      padding: 13px 28px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(45deg, #ff805c, #ffb14a);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .next-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #finalMessage {
+      display: none;
+      text-align: center;
+      animation: appear 1s ease;
+    }
+
+    #finalMessage h1 {
+      color: #ffd18a;
+      margin-bottom: 20px;
+    }
+
+    #finalMessage p {
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    @media(max-width: 400px) {
+      .envelope {
+        width: 260px;
+      }
+
+      .envelope::before {
+        border-left-width: 130px;
+        border-right-width: 130px;
+      }
+
+      .letter {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stars"></div>
+
+  <div class="container">
+
+    <div id="opening">
+      <h2>One last thing, Siddharatha...</h2>
+
+      <div class="envelope" id="envelope" onclick="openLetter()">
+        <div class="envelope-label">💌</div>
+      </div>
+
+      <p style="margin-top:25px;color:#eac58e">
+        Tap the envelope to open your surprise ❤️
+      </p>
+    </div>
+
+    <div class="letter" id="letter">
+
+      <h3>Dear Siddharatha,</h3>
+
+      <div class="message" id="message"></div>
+
+      <div class="signature" id="signature">
+        ittlu ne priyamithrurala,<br>
+        –Kalal Soujanya ❤️
+      </div>
+
+      <button class="heart" onclick="showLove()">❤️</button>
+
+    </div>
+
+    <button class="next-btn" id="nextBtn" onclick="finalSurprise()">
+      One more surprise ❤️
+    </button>
+
+    <div id="finalMessage">
+      <h1>🎂 HAPPY BIRTHDAY SIDHHUUU! 🎉</h1>
+      <p>
+        May your life always be filled with happiness,
+        love and beautiful memories. ❤️
+      </p>
+      <h1 style="margin-top:25px">🥳💖🎁</h1>
+      <p>Stay happy and keep smiling forever!</p>
+    </div>
+
+  </div>
+
+  <script>
+
+    // Birthday message
+    const birthdayMessage = `HAPPY BIRTHDAY SIDHHUUUU 🎉🎂
+
+In simple words siddhu, you are the best person I have never seen. How your are with us, I wish you wont be same with others. 
+
+We do have less memories but those are very special to me.
+
+Thank you for being my person as best friend ❤️🫶 and favourite person.
+
+I wish you to get successful with lot of love and joy.
+
+You know you are kind & cute too 🥹❤️.
+
+You heard this one best book is equal to hundred good friends, but one good friend is equal to a library. You provide that is true.`;
+
+    // Open envelope
+    function openLetter() {
+
+      document.getElementById("envelope")
+        .classList.add("open");
+
+      setTimeout(() => {
+
+        document.getElementById("opening")
+          .classList.add("hidden");
+
+        document.getElementById("letter")
+          .style.display = "block";
+
+        typeMessage();
+
+      }, 900);
+    }
+
+    // Typing effect
+    let index = 0;
+
+    function typeMessage() {
+
+      const message = document.getElementById("message");
+
+      if (index < birthdayMessage.length) {
+
+        message.textContent += birthdayMessage.charAt(index);
+
+        index++;
+
+        setTimeout(typeMessage, 45);
+
+      } else {
+
+        document.getElementById("nextBtn")
+          .style.display = "block";
+
+      }
+    }
+
+    // Heart button
+    function showLove() {
+      alert("You are always special! ❤️🥹");
+    }
+
+    // Final surprise
+    function finalSurprise() {
+
+      document.getElementById("letter")
+        .style.display = "none";
+
+      document.getElementById("nextBtn")
+        .style.display = "none";
+
+      document.getElementById("finalMessage")
+        .style.display = "block";
+
+    }
+
+
+
+  </script>
+
+</body>
+
+</html>
